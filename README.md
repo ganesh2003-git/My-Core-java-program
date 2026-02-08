@@ -20,3 +20,15 @@ As a developer interested in Software Development, I have curated these programs
 1. Clone the repository:
    ```bash
    git clone [https://github.com/ganesh2003-git/My-Core-java-program.git](https://github.com/ganesh2003-git/My-Core-java-program.git)
+   Navigate to the folder:
+
+Bash
+cd My-Core-java-program
+Compile a program:
+
+Bash
+javac FileName.java
+Run the program:
+
+Bash
+java FileName
