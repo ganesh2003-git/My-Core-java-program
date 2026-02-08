@@ -1,0 +1,8 @@
+class  Emp
+{
+	int eno;
+	String ename;
+	double sal;
+	String dept;
+	
+}

@@ -1,0 +1,30 @@
+ class Customer 
+{
+	int acc;
+	String Cname;
+	static String Bname;
+	void details() {
+		//System.out.println(acc +" ": + Cname +" ": + Bname);
+		System.out.println(acc + " " + Cname + " " + Bname);
+	}
+}
+
+public class Bank1
+{
+	public static void main(String[] args){
+		//emp 1 details 
+		Customer c1=new Customer ();
+		c1.acc=1111;
+		c1.Cname="Ganesh";
+		c1.Bname="HDFC";
+		c1 .details();
+		
+		//emp2 details
+		Customer c2=new Customer();
+		c2.acc=2222;
+		c2.Cname="Kiran";
+		c2.Bname="HDFC";
+		c2. details();
+	}
+	
+}

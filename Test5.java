@@ -1,0 +1,12 @@
+class Test5 
+{
+	public static void main(String[] args) 
+	{
+		Collage2.m1();
+		 //Student3       Collage.m2();
+		Student3 s4=Collage2.m2();
+		System.out.println(s4.sno + " " + s4.sname + " " + s4.course + " " + s4.fee);
+		
+
+	}
+}

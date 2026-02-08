@@ -1,0 +1,40 @@
+//Exception Handling problem.
+//write a program to write two num using Scanner
+import java.util.Scanner;
+import java.util.InputMismatchException;
+class Division 
+{
+	public static void main(String[] args) 
+	{
+		Scanner sc=new Scanner(System.in);
+		int a;
+		while(true){
+			try{
+				
+		System.out.println("Enter First Num");
+		a=sc.nextInt();
+		break;
+	}catch(InputMismatchException e){
+		System.out.println("Please enter only integer\n");
+			sc.nextLine();
+	}
+}
+//while (close)
+while(true){
+	try{
+	System.out.print("Enter Second num\n");
+	int b=sc.nextInt();
+	int c=a/b;
+	System.out.println("Result:"+c);
+	break;
+}catch(InputMismatchException e){
+	System.out.println("Please enter only enteger\n");
+	sc.nextLine();
+}catch(ArithmeticException e){
+		System.out.println("Please do not enter second number as zero");
+	}
+	
+	//while (close)
+}
+}
+}

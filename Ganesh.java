@@ -1,0 +1,46 @@
+interface Shape{
+	abstract void findArea();
+	class Rentagle implements Shape{
+		double l,b;
+		
+		public void findArea(){
+			System.out.println("findArea() method is execute from Rentagle");
+			System.out.println("Rentagle Area:"+ (l*b));
+	}
+	}
+
+class Square implements Shape{
+	double s;
+	public void findArea(){
+		System.out.println("findArea() method is execute from Square");
+			System.out.println("Sqare Area:"+ (s*s));
+	}
+}
+class Circle implements Shape{
+ static final double PI=3.14;
+ int r;
+	public void findArea(){
+		System.out.println("findArea() method is execute from Square");
+			System.out.println("Circle Area:"+ (PI*r*r));
+	}
+}
+}
+/*
+class Ganesh 
+{
+	public static void main(String[] args) 
+	{
+		Shape s1;
+		
+		s1=new Rectangle();
+		s1.findArea();
+		
+		s1=new Square();
+		s1.findArea();
+		
+		
+		s1=new Circle();
+		s1.findArea();
+	}
+}
+*/

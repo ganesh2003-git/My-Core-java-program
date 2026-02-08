@@ -1,0 +1,13 @@
+class Sample1{
+static int d=50;
+static{
+	System.out.println("Sa SB1");
+	System.out.println(Example1.a);
+}
+
+	public static void main(String[] args) 
+	{
+		System.out.println("sa main");
+		//System.out.println(Example1.b);
+	}
+}

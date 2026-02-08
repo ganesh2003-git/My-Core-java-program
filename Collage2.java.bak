@@ -1,0 +1,19 @@
+class Collage2 
+{
+	static void m1(){
+		Student3 s1  =new Student3();
+		s3.sno=100;
+		s3.sname="HK";
+		s3.course="CJ";
+		s3.fee=1000;
+		System.out.println(s1.sno+""+s1.sname+""+s1.course+""+s1.fee);
+	}
+	static Student3 m2(){
+		Student3 s2  =new Student3();
+		s3.sno=101;
+		s3.sname="BK";
+		s3.course="AJ";
+		s3.fee=1000;
+		return s2;
+	}
+}

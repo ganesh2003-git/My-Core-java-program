@@ -1,0 +1,17 @@
+class Shape2 
+{
+	public static void main(String[] args) 
+	{
+		Ganesh s1;
+		
+		s1=new Square();
+		s1.findArea();
+		
+		s1=new Square();
+		s1.findArea();
+		
+		
+		s1=new Circle();
+		s1.findArea();
+	}
+}
