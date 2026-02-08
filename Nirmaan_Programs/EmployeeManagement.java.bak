@@ -1,0 +1,142 @@
+import java.util.Scanner;
+
+class Company {
+    private String licenseNo;
+    private String name;
+    private String operationType;
+
+    public void setLicenseNo(String licenseNo) {
+        this.licenseNo = licenseNo;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
+    }
+
+    public String getDetails() {
+        return "Company: " + name + ", License No: " + licenseNo + ", Operation Type: " + operationType;
+    }
+}
+
+class Employee {
+    protected String number;
+    protected String name;
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDetails() {
+        return "Employee: " + name + ", Number: " + number;
+    }
+}
+
+class PermanentEmployee extends Employee {
+    private String destination;
+    private double basicSalary;
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setBasicSalary(double basicSalary) {
+        this.basicSalary = basicSalary;
+    }
+
+    public double calculateSalary() {
+        double da = 0.20 * basicSalary;
+        double ta = 0.07 * basicSalary;
+        double cca = 5000;
+        double medAll = 0.10 * basicSalary;
+
+        double pe = 0.05 * basicSalary;
+        double gpf = 0.05 * basicSalary;
+        double ltc = 0.02 * basicSalary;
+
+        double grossSalary = basicSalary + da + ta + cca + medAll;
+        double deductions = pe + gpf + ltc;
+        return grossSalary - deductions;
+    }
+
+    public void displayPaySlip(Company company) {
+        System.out.println(company.getDetails());
+        System.out.println(getDetails() + ", Destination: " + destination);
+        System.out.printf("Net Salary: %.2f%n", calculateSalary());
+    }
+}
+
+class OutsourcingEmployee extends Employee {
+    private int workingDays;
+    private double wagePerDay;
+
+    public void setWorkingDays(int workingDays) {
+        this.workingDays = workingDays;
+    }
+
+    public void setWagePerDay(double wagePerDay) {
+        this.wagePerDay = wagePerDay;
+    }
+
+    public double calculateSalary() {
+        return workingDays * wagePerDay;
+    }
+
+    public void displayPaySlip(Company company) {
+        System.out.println(company.getDetails());
+        System.out.println(getDetails() + ", Working Days: " + workingDays);
+        System.out.printf("Total Salary: %.2f%n", calculateSalary());
+    }
+}
+
+public class EmployeeSalaryApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input company details
+        Company company = new Company();
+        System.out.print("Enter Company License No: ");
+        company.setLicenseNo(scanner.nextLine());
+        System.out.print("Enter Company Name: ");
+        company.setName(scanner.nextLine());
+        System.out.print("Enter Company Operation Type: ");
+        company.setOperationType(scanner.nextLine());
+
+        // Input permanent employee details
+        PermanentEmployee permanentEmployee = new PermanentEmployee();
+        System.out.print("Enter Permanent Employee Number: ");
+        permanentEmployee.setNumber(scanner.nextLine());
+        System.out.print("Enter Permanent Employee Name: ");
+        permanentEmployee.setName(scanner.nextLine());
+        System.out.print("Enter Permanent Employee Destination: ");
+        permanentEmployee.setDestination(scanner.nextLine());
+        System.out.print("Enter Permanent Employee Basic Salary: ");
+        permanentEmployee.setBasicSalary(scanner.nextDouble());
+
+        // Input outsourcing employee details
+        OutsourcingEmployee outsourcingEmployee = new OutsourcingEmployee();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Outsourcing Employee Number: ");
+        outsourcingEmployee.setNumber(scanner.nextLine());
+        System.out.print("Enter Outsourcing Employee Name: ");
+        outsourcingEmployee.setName(scanner.nextLine());
+        System.out.print("Enter Outsourcing Employee Working Days: ");
+        outsourcingEmployee.setWorkingDays(scanner.nextInt());
+        System.out.print("Enter Outsourcing Employee Wage Per Day: ");
+        outsourcingEmployee.setWagePerDay(scanner.nextDouble());
+
+        // Display pay slips
+        System.out.println("\n--- Pay Slips ---");
+        permanentEmployee.displayPaySlip(company);
+        outsourcingEmployee.displayPaySlip(company);
+
+        scanner.close();
+    }
+}

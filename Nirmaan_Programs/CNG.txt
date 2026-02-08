@@ -1,0 +1,329 @@
+//adminDAO.java
+package com.cng.booking.dao;
+
+import com.cng.booking.model.CNGPump;
+import com.cng.booking.util.DBUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class AdminDAO {
+    public boolean login(String email, String password) throws SQLException {
+        String query = "SELECT * FROM admin WHERE email = ? AND password = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+    public boolean approvePump(int pumpId) throws SQLException {
+        String query = "UPDATE cng_pumps SET is_approved = TRUE WHERE pump_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, pumpId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public List<CNGPump> viewAllPumps() throws SQLException {
+        List<CNGPump> pumps = new ArrayList<>();
+        String query = "SELECT * FROM cng_pumps";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                CNGPump pump = new CNGPump();
+                pump.setPumpId(rs.getInt("pump_id"));
+                pump.setPumpName(rs.getString("pump_name"));
+                // Set other fields
+                pumps.add(pump);
+            }
+        }
+        return pumps;
+    }
+
+    public boolean deletePump(int pumpId) throws SQLException {
+        String query = "DELETE FROM cng_pumps WHERE pump_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, pumpId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+}
+
+=====================================================
+CNGPumpSAO.java
+package com.cng.booking.dao;
+
+import com.cng.booking.model.CNGPump;
+import com.cng.booking.model.Booking;
+import com.cng.booking.util.DBUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CNGPumpDAO {
+    public boolean register(CNGPump pump) throws SQLException {
+        String query = "INSERT INTO cng_pumps (pump_name, address, city, taluka, district, open_time, close_time, mobile, latitude, longitude, password, cng_kg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, pump.getPumpName());
+            stmt.setString(2, pump.getAddress());
+            // Set other fields
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean login(String mobile, String password) throws SQLException {
+        String query = "SELECT * FROM cng_pumps WHERE mobile = ? AND password = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, mobile);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+    public List<CNGPump> viewAllPumps(String city, String taluka, String district) throws SQLException {
+        List<CNGPump> pumps = new ArrayList<>();
+        String query = "SELECT * FROM cng_pumps WHERE city = ? AND taluka = ? AND district = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, city);
+            stmt.setString(2, taluka);
+            stmt.setString(3, district);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                CNGPump pump = new CNGPump();
+                pump.setPumpId(rs.getInt("pump_id"));
+                pump.setPumpName(rs.getString("pump_name"));
+                // Set other fields
+                pumps.add(pump);
+            }
+        }
+        return pumps;
+    }
+
+    public boolean updateCNGKG(int pumpId, double cngKg) throws SQLException {
+        String query = "UPDATE cng_pumps SET cng_kg = ? WHERE pump_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setDouble(1, cngKg);
+            stmt.setInt(2, pumpId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public List<Booking> viewBookings(int pumpId) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+        String query = "SELECT * FROM bookings WHERE pump_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, pumpId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getInt("booking_id"));
+                booking.setUserId(rs.getInt("user_id"));
+                // Set other fields
+                bookings.add(booking);
+            }
+        }
+        return bookings;
+    }
+}
+=========================================================
+UserDAO.java
+package com.cng.booking.dao;
+
+import com.cng.booking.model.User;
+import com.cng.booking.model.CNGPump;
+import com.cng.booking.model.Booking;
+import com.cng.booking.util.DBUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserDAO {
+    public boolean register(User user) throws SQLException {
+        String query = "INSERT INTO users (name, email, mobile, password, city) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            // Set other fields
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean login(String email, String password) throws SQLException {
+        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+    public List<CNGPump> viewCNGPumps(String city, String taluka, String district) throws SQLException {
+        List<CNGPump> pumps = new ArrayList<>();
+        String query = "SELECT * FROM cng_pumps WHERE city = ? AND taluka = ? AND district = ? AND is_approved = TRUE";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, city);
+            stmt.setString(2, taluka);
+            stmt.setString(3, district);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                CNGPump pump = new CNGPump();
+                pump.setPumpId(rs.getInt("pump_id"));
+                pump.setPumpName(rs.getString("pump_name"));
+                // Set other fields
+                pumps.add(pump);
+            }
+        }
+        return pumps;
+    }
+
+    public boolean bookCNG(int userId, int pumpId, double cngKg) throws SQLException {
+        String query = "INSERT INTO bookings (user_id, pump_id, cng_kg_booked) VALUES (?, ?, ?)";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, pumpId);
+            stmt.setDouble(3, cngKg);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+}
+=========================================================================
+AdminLoginServlet.java
+
+package com.cng.booking.controller;
+
+import com.cng.booking.dao.AdminDAO;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/admin/login")
+public class AdminLoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        AdminDAO adminDAO = new AdminDAO();
+        boolean isValid = adminDAO.login(email, password);
+
+        if (isValid) {
+            response.sendRedirect("admin/dashboard.jsp");
+        } else {
+            response.sendRedirect("admin/login.jsp?error=1");
+        }
+    }
+}
+============================================================================
+ CNGPumpRegisterServlet.java
+ 
+ package com.cng.booking.controller;
+
+import com.cng.booking.dao.CNGPumpDAO;
+import com.cng.booking.model.CNGPump;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/pump/register")
+public class CNGPumpRegisterServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CNGPump pump = new CNGPump();
+        pump.setPumpName(request.getParameter("pumpName"));
+        // Set other fields
+
+        CNGPumpDAO pumpDAO = new CNGPumpDAO();
+        boolean isRegistered = pumpDAO.register(pump);
+
+        if (isRegistered) {
+            response.sendRedirect("pump/login.jsp");
+        } else {
+            response.sendRedirect("pump/register.jsp?error=1");
+        }
+    }
+}
+========================================================================
+UserBookingServlet.java
+
+package com.cng.booking.controller;
+
+import com.cng.booking.dao.UserDAO;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/user/book")
+public class UserBookingServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int pumpId = Integer.parseInt(request.getParameter("pumpId"));
+        double cngKg = Double.parseDouble(request.getParameter("cngKg"));
+
+        UserDAO userDAO = new UserDAO();
+        boolean isBooked = userDAO.bookCNG(userId, pumpId, cngKg);
+
+        if (isBooked) {
+            response.sendRedirect("user/dashboard.jsp");
+        } else {
+            response.sendRedirect("user/booking.jsp?error=1");
+        }
+    }
+}
+=====================================================================
+admin/login.jsp
+<form action="admin/login" method="post">
+    Email: <input type="email" name="email" required><br>
+    Password: <input type="password" name="password" required><br>
+    <input type="submit" value="Login">
+</form>
+========================================================
+pump/register.jsp
+
+<form action="pump/register" method="post">
+    Pump Name: <input type="text" name="pumpName" required><br>
+    Address: <input type="text" name="address" required><br>
+    <!-- Add other fields -->
+    <input type="submit" value="Register">
+</form>
+=========================================================
+ user/booking.jsp
+ <form action="user/book" method="post">
+    User ID: <input type="number" name="userId" required><br>
+    Pump ID: <input type="number" name="pumpId" required><br>
+    CNG (kg): <input type="number" name="cngKg" required><br>
+    <input type="submit" value="Book">
+</form>
+=====================================================

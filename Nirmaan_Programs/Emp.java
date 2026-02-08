@@ -1,0 +1,143 @@
+import java.util.Scanner;
+
+// Class to represent a Company
+class Company {
+    private String name;
+    private String operations;
+
+    public Company(String name, String operations) {
+        this.name = name;
+        this.operations = operations;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOperations() {
+        return operations;
+    }
+}
+
+// Abstract class for Employee
+abstract class Employee {
+    protected String name;
+    protected String number;
+
+    public Employee(String name, String number) {
+        this.name = name;
+        this.number = number;
+    }
+
+    public abstract void displayPayslip();
+}
+
+// Class for Regular Employees
+class RegularEmployee extends Employee {
+    private String destination;
+    private double basicSalary;
+
+    public RegularEmployee(String name, String number, String destination, double basicSalary) {
+        super(name, number);
+        this.destination = destination;
+        this.basicSalary = basicSalary;
+    }
+
+    public double calculateSalary() {
+        double da = 0.20 * basicSalary;
+        double ta = 0.10 * basicSalary;
+        double cca = 5000;
+        double medAll = 0.10 * basicSalary;
+
+        double pe = 0.05 * basicSalary;
+        double gpf = 0.05 * basicSalary;
+        double ltc = 0.02 * basicSalary;
+
+        double grossSalary = basicSalary + da + ta + cca + medAll;
+        double netSalary = grossSalary - (pe + gpf + ltc);
+
+        return netSalary;
+    }
+
+    @Override
+    public void displayPayslip() {
+        double grossSalary = basicSalary + (0.20 * basicSalary) + (0.10 * basicSalary) + 5000 + (0.10 * basicSalary);
+        double netSalary = calculateSalary();
+        System.out.println("Regular Employee Name: " + name);
+        System.out.println("Employee Number: " + number);
+        System.out.println("Destination: " + destination);
+        System.out.printf("Gross Salary: %.2f\n", grossSalary);
+        System.out.printf("Net Salary: %.2f\n", netSalary);
+        System.out.println("------------------------------");
+    }
+}
+
+// Class for Outsourcing Employees
+class OutsourcingEmployee extends Employee {
+    private int workingDays;
+    private double wagePerDay;
+
+    public OutsourcingEmployee(String name, String number, int workingDays, double wagePerDay) {
+        super(name, number);
+        this.workingDays = workingDays;
+        this.wagePerDay = wagePerDay;
+    }
+
+    public double calculateSalary() {
+        return workingDays * wagePerDay;
+    }
+
+    @Override
+    public void displayPayslip() {
+        double totalSalary = calculateSalary();
+        System.out.println("Outsourcing Employee Name: " + name);
+        System.out.println("Employee Number: " + number);
+        System.out.printf("Total Salary: %.2f\n", totalSalary);
+        System.out.println("------------------------------");
+    }
+}
+
+// Main class to manage the application
+ class EmployeeManagement {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input company details
+        System.out.print("Enter Company Name: ");
+        String companyName = scanner.nextLine();
+        System.out.print("Enter Type of Operations: ");
+        String operations = scanner.nextLine();
+        Company company = new Company(companyName, operations);
+	
+
+
+        // Display company details
+        System.out.println("Company Name: " + company.getName());
+        System.out.println("Type of Operations: " + company.getOperations());
+        System.out.println("------------------------------");
+
+        // Input regular employees
+        RegularEmployee[] regularEmployees = new RegularEmployee[4];
+        for (int i = 0; i < 4; i++) {
+            System.out.println("Enter details for Regular Employee " + (i + 1) + ":");
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Employee Number: ");
+            String number = scanner.nextLine();
+            System.out.print("Destination: ");
+            String destination = scanner.nextLine();
+            System.out.print("Basic Salary: ");
+            double basicSalary = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+
+            regularEmployees[i] = new RegularEmployee(name, number, destination, basicSalary);
+        }
+
+        // Input outsourcing employees
+        OutsourcingEmployee[] outsourcingEmployees = new OutsourcingEmployee[2];
+        for (int i = 0; i < 2; i++) {
+            System.out.println("Enter details for Outs");
+		}
+	}
+}
+	
